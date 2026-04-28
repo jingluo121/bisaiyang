@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <title>云巢·颐养暖食坊 | 让每一位老人轻松吃上热乎饭</title>
+  <!-- 引入 GSAP 动画库 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- 字体与图标库 (Font Awesome 6 免费图标) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #FEF7E8;  /* 米色暖底 */
+      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, 'Noto Sans', '圆体', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: #3E2A1F; /* 深棕色主文字 */
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    /* 老龄友好全局字重、字号 */
+    h1, h2, h3, .btn, .card-title {
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* 圆角 & 阴影 */
+    .card, .hero-card, .feature-card, .compare-card {
+      border-radius: 32px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 按钮风格 */
+    .btn-primary {
+      background-color: #E67E22; /* 温暖橙色 */
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(230, 126, 34, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: #CF711F;
+      transform: scale(1.02);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #E67E22;
+      color: #E67E22;
+      padding: 12px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: #E67E22;
+      color: white;
+    }
+
+    /* Hero 区域 */
+    .hero {
+      background: linear-gradient(135deg, #FFF2E0 0%, #FDEBD0 100%);
+      border-radius: 0 0 60px 60px;
+      padding: 40px 0 70px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-illustration {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      opacity: 0.15;
+      pointer-events: none;
+      font-size: 280px;
+      transform: translate(30px, 30px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #B45F2A, #E67E22);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero .tagline {
+      font-size: 1.3rem;
+      color: #5C3E24;
+      max-width: 550px;
+      margin: 0 auto 32px auto;
+      font-weight: 500;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* 痛点与承诺区 */
+    .pain-points {
+      background: white;
+      margin-top: -40px;
+      border-radius: 48px;
+      padding: 40px 32px;
+      position: relative;
+      z-index: 3;
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.08);
+    }
+
+    .split-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: space-between;
+    }
+
+    .pain-box, .solution-promise {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .pain-item {
+      background: #FFF6ED;
+      padding: 18px 20px;
+      border-radius: 28px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .pain-item i {
+      font-size: 28px;
+      color: #E67E22;
+    }
+
+    .promise-highlight {
+      background: #FBEAD5;
+      padding: 28px;
+      border-radius: 32px;
+      text-align: center;
+    }
+
+    .promise-highlight h3 {
+      font-size: 1.8rem;
+      color: #C25D1A;
+      margin-bottom: 12px;
+    }
+
+    /* 三卡片区域 */
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin: 60px 0 24px 0;
+      color: #3E2A1F;
+      position: relative;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #7C5E42;
+      margin-bottom: 48px;
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin: 40px 0 40px;
+    }
+
+    .mode-card {
+      background: white;
+      flex: 1;
+      min-width: 280px;
+      border-radius: 36px;
+      padding: 32px 24px;
+      transition: all 0.3s;
+      text-align: center;
+      border: 1px solid #FFE4C4;
+    }
+
+    .mode-icon {
+      font-size: 64px;
+      color: #E67E22;
+      margin-bottom: 20px;
+      background: #FFF2E4;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      border-radius: 60px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mode-card h3 {
+      font-size: 1.8rem;
+      margin: 16px 0 12px;
+    }
+
+    .mode-desc {
+      color: #5A3F28;
+      margin: 16px 0;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .highlight-badge {
+      background: #F6E1C1;
+      border-radius: 40px;
+      padding: 8px 16px;
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #B45A24;
+    }
+
+    /* 适老化对比区 */
+    .compare-wrapper {
+      background: #F9EFE2;
+      border-radius: 60px;
+      padding: 40px 28px;
+      margin: 40px 0 40px;
+    }
+
+    .compare-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .compare-card {
+      background: white;
+      flex: 1;
+      min-width: 260px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .mock-ui {
+      background: #2D2A24;
+      border-radius: 32px;
+      padding: 20px 12px;
+      color: #F2E8DA;
+      margin-bottom: 20px;
+    }
+
+    .big-icon-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 2rem;
+      margin: 15px 0;
+    }
+
+    .mock-text {
+      background: #4C3A2A;
+      padding: 12px;
+      border-radius: 28px;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    .health-note {
+      background: #E0F0E8;
+      border-radius: 28px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: #2A5C4A;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: #2C241A;
+      color: #F8E3C2;
+      border-radius: 48px 48px 0 0;
+      padding: 50px 20px 40px;
+      margin-top: 70px;
+      text-align: center;
+    }
+
+    .footer h4 {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .contact-links {
+      margin-top: 28px;
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .contact-links span {
+      background: #4F3A28;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 1rem;
+    }
+
+    /* 响应式细节 */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero .tagline {
+        font-size: 1rem;
+      }
+      .section-title {
+        font-size: 1.8rem;
+      }
+      .pain-item {
+        font-size: 1rem;
+      }
+      .btn-primary, .btn-outline {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      .container {
+        padding: 0 18px;
+      }
+    }
+
+    /* 动画效果 */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    /* 手绘样式点缀 */
+    .hand-drawn {
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><path fill="none" stroke="%23E67E22" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4" d="M20,50 L180,50" /></svg>');
+      background-repeat: repeat-x;
+      background-position: bottom;
+      padding-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-bg-illustration">🍲🏡✨</div>
+  <div class="container hero-content">
+    <h1>云巢·颐养暖食坊</h1>
+    <div class="tagline">智能不冰冷，简单不将就 —— 乡村老人的专属“指尖食堂”</div>
+    <div class="hero-buttons">
+      <button class="btn-primary" id="watchVideoBtn"><i class="fas fa-play"></i> 观看介绍视频</button>
+      <button class="btn-outline" id="learnModesBtn"><i class="fas fa-arrow-right"></i> 了解三种点餐方式</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- 痛点与承诺区域 -->
+  <div class="pain-points fade-up">
+    <div class="split-grid">
+      <div class="pain-box">
+        <div class="pain-item"><i class="fas fa-frown"></i> 子女不在身边，做饭难？</div>
+        <div class="pain-item"><i class="fas fa-eye-slash"></i> 眼花看不清，不会用复杂App？</div>
+        <div class="pain-item"><i class="fas fa-phone-alt"></i> 电话订餐怕记错、漏单？</div>
+      </div>
+      <div class="solution-promise">
+        <div class="promise-highlight">
+          <h3>✨ 我们的解法 ✨</h3>
+          <p style="font-size: 1.3rem; font-weight: 500;">三种模式，总有一种适合咱爸妈。</p>
+          <i class="fas fa-heart" style="color:#E67E22; font-size: 32px; margin-top: 10px;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心功能区：三种点餐模式（重中之重） -->
+  <div class="section-title hand-drawn fade-up">🍲 温暖点餐 · 触手可及 🍲</div>
+  <div class="section-sub fade-up">科技有温度，无论哪种方式，都要吃上热乎饭</div>
+
+  <div class="cards-grid" id="cardsContainer">
+    <!-- 卡片1: 语音点餐 -->
+    <div class="mode-card fade-up">
+      <div class="mode-icon"><i class="fas fa-microphone-alt"></i></div>
+      <h3>方言也能懂 · 语音点餐</h3>
+      <div class="mode-desc">针对不识字、视力不佳的老人，开发方言识别语音点餐功能。对着它“说出来”，想吃什么就订什么。</div>
+      <div class="highlight-badge"><i class="fas fa-language"></i> 支持陕西当地方言 · 乡音无碍</div>
+    </div>
+    <!-- 卡片2: 子女代点 -->
+    <div class="mode-card fade-up">
+      <div class="mode-icon"><i class="fas fa-hand-holding-heart"></i></div>
+      <h3>远方的孝心 · 子女代点</h3>
+      <div class="mode-desc">子女可通过小程序远程为父母下单，定制慢病餐食，查看健康报告。距离虽远，关爱从未缺席。</div>
+      <div class="highlight-badge"><i class="fas fa-clinic-medical"></i> 慢性病饮食禁忌自动匹配</div>
+    </div>
+    <!-- 卡片3: 电话代订 -->
+    <div class="mode-card fade-up">
+      <div class="mode-icon"><i class="fas fa-phone-volume"></i></div>
+      <h3>传统不淘汰 · 电话代订</h3>
+      <div class="mode-desc">保留最传统的电话订餐通道，由志愿者或村助餐专干协助录入系统。不强制用智能机，去数字化鸿沟。</div>
+      <div class="highlight-badge"><i class="fas fa-hands-helping"></i> 真人对答，邻里温情</div>
+    </div>
+  </div>
+
+  <!-- 适老化设计细节：不仅是工具，更是陪伴 -->
+  <div class="compare-wrapper fade-up">
+    <div style="text-align: center;">
+      <h2 style="font-size: 2rem; color:#3E2A1F;">📱 不仅是工具，更是陪伴 📱</h2>
+      <p style="font-size: 1.1rem; margin-top: 8px;">极简界面 · 关怀闭环 · 健康守护</p>
+    </div>
+    <div class="compare-flex">
+      <div class="compare-card">
+        <div class="mock-ui">
+          <div class="big-icon-row">
+            <i class="fas fa-utensils"></i> <span style="font-size: 1.5rem;">🍛</span> <i class="fas fa-arrow-right"></i> <i class="fas fa-check-circle" style="color:#F4A261;"></i>
+          </div>
+          <div class="mock-text">大图标 · 大字体 · 高对比度</div>
+          <div style="margin-top: 12px;">极简界面，轻松点选</div>
+        </div>
+        <h3>✨ 极简视觉体验</h3>
+        <p>大按钮、高饱和度配色，一次看清，避免误触。</p>
+      </div>
+      <div class="compare-card">
+        <div class="mock-ui">
+          <div class="big-icon-row">
+            <i class="fas fa-biking"></i> 送餐员 <i class="fas fa-heartbeat"></i> 健康提醒
+          </div>
+          <div class="health-note">📋 送餐即探访 · 血压血糖同步子女</div>
+        </div>
+        <h3>🏡 关怀闭环 · 送餐即探访</h3>
+        <p>骑手/志愿者上门送餐时记录老人状态，健康数据自动同步子女或村医（反馈端），暖心加倍。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚区域 -->
+  <div class="footer fade-up">
+    <h4>🌾 为乡村留守的爸妈，点亮一盏温饱的灯 🌾</h4>
+    <p style="margin: 16px auto; max-width: 500px;">期待与各地村委会、公益机构、餐饮供应链合作，让暖食服务抵达每个角落。</p>
+    <div class="contact-links">
+      <span><i class="fas fa-envelope"></i> caring@yunciao.com</span>
+      <span><i class="fas fa-phone-alt"></i> 助餐热线 400-882-6868</span>
+      <span><i class="fab fa-weixin"></i> 云巢颐养官方服务号</span>
+    </div>
+    <div style="margin-top: 32px; font-size: 0.8rem; opacity: 0.7;">© 2025 云巢·颐养暖食坊 — 技术不取代人情，让每一位老人都能轻松吃上热乎饭</div>
+  </div>
+</div>
+
+<script>
+  // 初始化 GSAP 与 ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 淡入动画: 所有 .fade-up 元素在滚动或页面加载时展现
+  function initAnimations() {
+    const fadeElements = document.querySelectorAll('.fade-up');
+    fadeElements.forEach(el => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+    // 卡片额外顺序微动
+    const cards = document.querySelectorAll('.mode-card');
+    cards.forEach((card, idx) => {
+      gsap.fromTo(card,
+        { opacity: 0, scale: 0.96 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          delay: idx * 0.1,
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          }
+        }
+      );
+    });
+  }
+
+  // 模拟“观看介绍视频”的交互效果 (由于没有真实视频，弹出轻提示并模拟)
+  const videoBtn = document.getElementById('watchVideoBtn');
+  if (videoBtn) {
+    videoBtn.addEventListener('click', () => {
+      // 优雅轻提醒，演示暖食概念视频弹窗效果
+      const modalDiv = document.createElement('div');
+      modalDiv.innerHTML = `
+          <div style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); z-index:1000; display:flex; align-items:center; justify-content:center; backdrop-filter: blur(5px);" id="videoModal">
+              <div style="background: #FFF7EF; max-width: 90%; width: 560px; border-radius: 48px; padding: 24px; text-align: center; box-shadow: 0 30px 40px rgba(0,0,0,0.3);">
+                  <i class="fas fa-play-circle" style="font-size: 70px; color:#E67E22;"></i>
+                  <h3 style="margin: 20px 0 10px;">云巢·暖食宣传片</h3>
+                  <p style="margin-bottom: 20px;">“科技有温度，让乡村老人每一餐都幸福” —— 展示语音方言识别、子女远程关爱、村口助餐场景</p>
+                  <div style="background:#EEDCC8; border-radius: 28px; padding: 16px; margin-bottom: 20px;">
+                      🎥 模拟视频预览： 老人在家对着手机说出“今儿个想吃臊子面”，系统自动下单，助餐员热腾腾送达。
+                  </div>
+                  <button id="closeModalBtn" class="btn-primary" style="background:#BC6F2C;">关闭预览</button>
+              </div>
+          </div>
+      `;
+      document.body.appendChild(modalDiv);
+      const closeModal = document.getElementById('closeModalBtn');
+      const modalContainer = document.getElementById('videoModal');
+      const closeHandler = () => {
+        if (modalContainer) modalContainer.remove();
+      };
+      if (closeModal) closeModal.addEventListener('click', closeHandler);
+      modalContainer?.addEventListener('click', (e) => {
+        if (e.target === modalContainer) closeHandler();
+      });
+    });
+  }
+
+  // 了解三种点餐方式按钮：平滑滚动到核心卡片区域
+  const learnBtn = document.getElementById('learnModesBtn');
+  if (learnBtn) {
+    learnBtn.addEventListener('click', (e) => {
+      const cardsSection = document.querySelector('.cards-grid');
+      if (cardsSection) {
+        cardsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 增加轻微高亮特效提示第一张卡片
+        const firstCard = document.querySelector('.mode-card');
+        if (firstCard) {
+          firstCard.style.transition = 'all 0.2s';
+          firstCard.style.boxShadow = '0 0 0 3px #E67E22, 0 12px 28px rgba(0,0,0,0.1)';
+          setTimeout(() => {
+            firstCard.style.boxShadow = '';
+          }, 1200);
+        }
+      }
+    });
+  }
+
+  // 增加语音点餐的简单声波动画演示（鼠标/触摸悬停声波样式，趣味交互）
+  const voiceCard = document.querySelector('.mode-card:first-child .mode-icon');
+  if (voiceCard) {
+    voiceCard.addEventListener('mouseenter', () => {
+      voiceCard.style.transition = 'all 0.2s';
+      voiceCard.style.transform = 'scale(1.05)';
+      voiceCard.style.background = '#FAD6B3';
+    });
+    voiceCard.addEventListener('mouseleave', () => {
+      voiceCard.style.transform = 'scale(1)';
+      voiceCard.style.background = '#FFF2E4';
+    });
+  }
+
+  // 对于任何需要手动触发的“电话代订”暖心演示，增加轻提示
+  const phoneCard = document.querySelectorAll('.mode-card')[2];
+  if (phoneCard) {
+    phoneCard.addEventListener('click', (e) => {
+      if(e.target.closest('.mode-card')) {
+        // 提示保留传统通道的温暖
+        const toastMsg = document.createElement('div');
+        toastMsg.innerText = '📞 电话代订通道：志愿者暖心接听，记录您的餐食，让温暖直达餐桌。';
+        toastMsg.style.position = 'fixed';
+        toastMsg.style.bottom = '30px';
+        toastMsg.style.left = '20px';
+        toastMsg.style.right = '20px';
+        toastMsg.style.backgroundColor = '#3E2A1F';
+        toastMsg.style.color = '#FCE5C1';
+        toastMsg.style.padding = '14px 18px';
+        toastMsg.style.borderRadius = '60px';
+        toastMsg.style.textAlign = 'center';
+        toastMsg.style.fontWeight = 'bold';
+        toastMsg.style.zIndex = '999';
+        toastMsg.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+        document.body.appendChild(toastMsg);
+        setTimeout(() => {
+          toastMsg.style.opacity = '0';
+          setTimeout(() => toastMsg.remove(), 500);
+        }, 2500);
+      }
+    });
+  }
+
+  // 子女代点卡片加入模拟提示：慢病匹配功能
+  const childCard = document.querySelectorAll('.mode-card')[1];
+  if (childCard) {
+    childCard.addEventListener('click', () => {
+      const tip = document.createElement('div');
+      tip.innerText = '❤️ 子女代点模式已关联健康档案，自动避开高盐高糖饮食，慢病食谱匹配中。';
+      tip.style.cssText = 'position:fixed; bottom:30px; left:20px; right:20px; background:#2C4F3B; color:#FBFFE4; padding:12px 18px; border-radius:60px; text-align:center; z-index:999; font-size:0.9rem; font-weight: bold; box-shadow:0 4px 12px black;';
+      document.body.appendChild(tip);
+      setTimeout(() => {
+        tip.style.opacity = '0';
+        setTimeout(() => tip.remove(), 500);
+      }, 2800);
+    });
+  }
+
+  // 加载动画初始化
+  window.addEventListener('DOMContentLoaded', () => {
+    initAnimations();
+    // 手动确保背景图片与插画情绪到位
+    const heroIllustration = document.querySelector('.hero-bg-illustration');
+    if (heroIllustration) {
+      gsap.fromTo(heroIllustration, { opacity: 0, scale: 0.9 }, { opacity: 0.2, scale: 1, duration: 1.2, delay: 0.2 });
+    }
+    // 添加手绘风格波纹装饰感
+    console.log('云巢·颐养暖食坊已启动 — 技术不取代人情，热饭暖人心');
+  });
+</script>
+</body>
+</html>
